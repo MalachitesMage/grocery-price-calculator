@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#315c43">
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#f7f4ed">
+  <title>Grocery Price Calculator</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f7f4ed;
+      color: #252525;
+    }
+
+    .app {
+      width: 100%;
+      max-width: 520px;
+      margin: 0 auto;
+      padding: 24px 18px 40px;
+    }
+
+    header {
+      margin-bottom: 24px;
+    }
+
+    h1 {
+      margin: 0 0 6px;
+      font-size: 30px;
+    }
+
+    .subtitle {
+      margin: 0;
+      color: #666;
+      font-size: 15px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 18px;
+      padding: 20px;
+      margin-bottom: 16px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+    }
+
+    label {
+      display: block;
+      font-size: 14px;
+      font-weight: bold;
+      margin-bottom: 6px;
+    }
+
+    input,
+    select {
+      width: 100%;
+      padding: 13px;
+      border: 1px solid #d5d5d5;
+      border-radius: 10px;
+      font-size: 16px;
+      background: white;
+    }
+
+    .field {
+      margin-bottom: 16px;
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    button {
+      width: 100%;
+      border: none;
+      border-radius: 12px;
+      padding: 14px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .calculate {
+      background: #2f6f4e;
+      color: white;
+    }
+
+    .clear {
+      margin-top: 10px;
+      background: #eeeeee;
+      color: #333;
+    }
+
+    .result {
+      text-align: center;
+      padding: 20px 10px;
+    }
+
+    .result-label {
+      color: #666;
+      font-size: 14px;
+      margin-bottom: 6px;
+    }
+
+    .price {
+      font-size: 38px;
+      font-weight: bold;
+      color: #2f6f4e;
+    }
+
+    .comparison {
+      display: none;
+    }
+
+    .comparison h2 {
+      margin-top: 0;
+      font-size: 20px;
+    }
+
+    .better {
+      padding: 14px;
+      border-radius: 12px;
+      background: #edf6ef;
+      margin-top: 12px;
+      font-weight: bold;
+      text-align: center;
+    }
+
+    @media (max-width: 400px) {
+      .row {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <main class="app">
+
+    <header>
+      <h1>Grocery Price Calculator</h1>
+      <p class="subtitle">Find out which package is actually cheaper.</p>
+    </header>
+
+    <!-- PRODUCT A -->
+    <section class="card">
+
+      <h2>Product 1</h2>
+
+      <div class="field">
+        <label for="name1">Product name</label>
+        <input
+          id="name1"
+          type="text"
+          placeholder="Example: Brand A cereal"
+        >
+      </div>
+
+      <div class="row">
+
+        <div class="field">
+          <label for="price1">Price ($)</label>
+          <input
+            id="price1"
+            type="number"
+            min="0"
+            step="0.01"
+            placeholder="4.99"
+          >
+        </div>
+
+        <div class="field">
+          <label for="size1">Package size</label>
+          <input
+            id="size1"
+            type="number"
+            min="0"
+            step="0.01"
+            placeholder="16"
+          >
+        </div>
+
+      </div>
+
+      <div class="field">
+        <label for="unit1">Unit</label>
+        <select id="unit1">
+          <option value="oz">ounces</option>
+          <option value="lb">pounds</option>
+          <option value="count">count</option>
+          <option value="fl oz">fluid ounces</option>
+          <option value="g">grams</option>
+          <option value="kg">kilograms</option>
+        </select>
+      </div>
+
+      <button class="calculate" onclick="calculateProduct(1)">
+        Calculate
+      </button>
+
+      <div id="result1" class="result">
+        <div class="result-label">Price per unit</div>
+        <div id="price1Result" class="price">$0.00</div>
+      </div>
+
+    </section>
+
+
+    <!-- PRODUCT B -->
+    <section class="card">
+
+      <h2>Product 2</h2>
+
+      <div class="field">
+        <label for="name2">Product name</label>
+        <input
+          id="name2"
+          type="text"
+          placeholder="Example: Brand B cereal"
+        >
+      </div>
+
+      <div class="row">
+
+        <div class="field">
+          <label for="price2">Price ($)</label>
+          <input
+            id="price2"
+            type="number"
+            min="0"
+            step="0.01"
+            placeholder="5.49"
+          >
+        </div>
+
+        <div class="field">
+          <label for="size2">Package size</label>
+          <input
+            id="size2"
+            type="number"
+            min="0"
+            step="0.01"
+            placeholder="18"
+          >
+        </div>
+
+      </div>
+
+      <div class="field">
+        <label for="unit2">Unit</label>
+        <select id="unit2">
+          <option value="oz">ounces</option>
+          <option value="lb">pounds</option>
+          <option value="count">count</option>
+          <option value="fl oz">fluid ounces</option>
+          <option value="g">grams</option>
+          <option value="kg">kilograms</option>
+        </select>
+      </div>
+
+      <button class="calculate" onclick="calculateProduct(2)">
+        Calculate
+      </button>
+
+      <div id="result2" class="result">
+        <div class="result-label">Price per unit</div>
+        <div id="price2Result" class="price">$0.00</div>
+      </div>
+
+    </section>
+
+
+    <!-- COMPARISON -->
+    <section id="comparison" class="card comparison">
+
+      <h2>Comparison</h2>
+
+      <div id="comparisonText"></div>
+
+      <div id="better" class="better"></div>
+
+    </section>
+
+
+    <!-- CLEAR -->
+    <button class="clear" onclick="clearAll()">
+      Clear Everything
+    </button>
+
+  </main>
+
+
+  <script>
+
+    function calculateProduct(number) {
+
+      const price = parseFloat(
+        document.getElementById("price" + number).value
+      );
+
+      const size = parseFloat(
+        document.getElementById("size" + number).value
+      );
+
+      const unit = document.getElementById(
+        "unit" + number
+      ).value;
+
+      if (
+        isNaN(price) ||
+        isNaN(size) ||
+        price <= 0 ||
+        size <= 0
+      ) {
+        alert("Please enter a valid price and package size.");
+        return;
+      }
+
+      const pricePerUnit = price / size;
+
+      document.getElementById(
+        "price" + number + "Result"
+      ).textContent =
+        "$" + pricePerUnit.toFixed(2) + " / " + unit;
+
+      compareProducts();
+    }
+
+
+    function compareProducts() {
+
+      const price1 = parseFloat(
+        document.getElementById("price1").value
+      );
+
+      const size1 = parseFloat(
+        document.getElementById("size1").value
+      );
+
+      const price2 = parseFloat(
+        document.getElementById("price2").value
+      );
+
+      const size2 = parseFloat(
+        document.getElementById("size2").value
+      );
+
+      const unit1 = document.getElementById("unit1").value;
+      const unit2 = document.getElementById("unit2").value;
+
+      if (
+        isNaN(price1) ||
+        isNaN(size1) ||
+        isNaN(price2) ||
+        isNaN(size2)
+      ) {
+        return;
+      }
+
+      if (unit1 !== unit2) {
+        document.getElementById("comparison").style.display = "block";
+
+        document.getElementById("comparisonText").textContent =
+          "The products use different units, so they cannot be directly compared.";
+
+        document.getElementById("better").textContent =
+          "Choose the same unit for both products.";
+
+        return;
+      }
+
+      const unitPrice1 = price1 / size1;
+      const unitPrice2 = price2 / size2;
+
+      const name1 =
+        document.getElementById("name1").value || "Product 1";
+
+      const name2 =
+        document.getElementById("name2").value || "Product 2";
+
+      document.getElementById("comparison").style.display = "block";
+
+      const difference =
+        Math.abs(unitPrice1 - unitPrice2);
+
+      document.getElementById("comparisonText").textContent =
+        name1 + " costs $" +
+        unitPrice1.toFixed(2) +
+        " per " + unit1 +
+        ", while " +
+        name2 +
+        " costs $" +
+        unitPrice2.toFixed(2) +
+        " per " + unit2 + ".";
+
+      if (unitPrice1 < unitPrice2) {
+
+        document.getElementById("better").textContent =
+          name1 +
+          " is the better value by $" +
+          difference.toFixed(2) +
+          " per " + unit1 + ".";
+
+      } else if (unitPrice2 < unitPrice1) {
+
+        document.getElementById("better").textContent =
+          name2 +
+          " is the better value by $" +
+          difference.toFixed(2) +
+          " per " + unit2 + ".";
+
+      } else {
+
+        document.getElementById("better").textContent =
+          "Both products have the same unit price.";
+
+      }
+    }
+
+
+    function clearAll() {
+
+      document.querySelectorAll("input").forEach(
+        input => input.value = ""
+      );
+
+      document.getElementById("price1Result")
+        .textContent = "$0.00";
+
+      document.getElementById("price2Result")
+        .textContent = "$0.00";
+
+      document.getElementById("comparison")
+        .style.display = "none";
+    }
+
+  </script>
+<script>
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("./sw.js");
+  }
+</script>
+</body>
+</html>
